@@ -14,11 +14,21 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
     console.log('Nuevo usuario conectado');
+
+    socket.on('mensajeDelUsuario', (mensaje) =>{
+        console.log('Recibiendo mensaje...');
+        console.log("Mensaje del usuario: ", mensaje);
+        socket.emit('mensajeDelServer', {
+            from: "Server",
+            to: "Usuario",
+            body: "Mensaje recibido."
+        });
+    });
+    
     socket.on('disconnect', () => {
         console.log('El usuario se desconectó.');
-    })
+    });
 });
-
 
 server.listen(port, ()=>{
     console.log(`Servidor corriendo en: http://localhost:${port}`);
